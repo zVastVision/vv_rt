@@ -1,0 +1,70 @@
+{
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-vastvision-dev-110542-authRole",
+      "UnauthRoleArn": "arn:aws:iam::143193398563:role/amplify-vastvision-dev-110542-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::143193398563:role/amplify-vastvision-dev-110542-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-vastvision-dev-110542-deployment",
+      "UnauthRoleName": "amplify-vastvision-dev-110542-unauthRole",
+      "StackName": "amplify-vastvision-dev-110542",
+      "StackId": "arn:aws:cloudformation:us-east-1:143193398563:stack/amplify-vastvision-dev-110542/51d5d140-d313-11ed-88ee-0ae1280dd05f",
+      "AmplifyAppId": "d3w4e22c4vjqwn"
+    }
+  },
+  "api": {
+    "vastvision": {
+      "dependsOn": [],
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "AWS_IAM"
+            }
+          ],
+          "defaultAuthentication": {
+            "authenticationType": "API_KEY",
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 30,
+              "description": "api key description"
+            }
+          }
+        },
+        "GraphQLAPIIdOutput": "weob5pq22jdzjcemxglfspa6im",
+        "GraphQLAPIEndpointOutput": "https://rpmhwc3enzewpesfxmn3y5cqci.appsync-api.us-east-1.amazonaws.com/graphql",
+        "GraphQLAPIKeyOutput": "da2-pcky7l26enc7rebbvx77doulji"
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync",
+      "lastPushTimeStamp": "2023-05-23T22:44:41.446Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-vastvision-dev-110542-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+        "logicalId": "apivastvision"
+      },
+      "lastPushDirHash": "37AqA66f91Q+1C81eH1R3+LVtP8="
+    }
+  },
+  "function": {
+    "ScannerProcessor": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "output": {
+        "LambdaExecutionRoleArn": "arn:aws:iam::143193398563:role/vastvisionLambdaRoleb480752e-dev",
+        "Region": "us-east-1",
+        "Arn": "arn:aws:lambda:us-east-1:143193398563:function:ScannerProcessor-dev",
+        "Name": "ScannerProcessor-dev",
+        "LambdaExecutionRole": "vastvisionLambdaRoleb480752e-dev"
+      },
+      "lastPushTimeStamp": "2023-05-23T22:44:41.448Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-vastvision-dev-110542-deployment/amplify-cfn-templates/function/ScannerProcessor-cloudformation-template.json",
+        "logicalId": "functionScannerProcessor"
+      },
+      "s3Bucket": {
+        "deploymentBucketName": "amplify-vastvision-dev-110542-deployment",
+        "s3Key": "amplify-builds/ScannerProcessor-7a74786b623243775a4b-build.zip"
+      }
+    }
+  }
+}

@@ -1,0 +1,75 @@
+type ExtraDetail {
+  name: String
+  value: String
+}
+
+type Warehouse @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  organizationID: ID! @index(name: "byOrganization")
+  Organization: Organization @belongsTo(fields: ["organizationID"])
+  name: String
+  location: String
+  Products: [Product] @hasMany(indexName: "byWarehouse", fields: ["id"])
+}
+
+type Organization @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  Warehouses: [Warehouse] @hasMany(indexName: "byOrganization", fields: ["id"])
+  name: String
+}
+
+type KitPart @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  quantity: Int
+  kitID: ID! @index(name: "byProduct")
+  Kit: Product @belongsTo(fields: ["kitID"])
+  part: Product @belongsTo(fields: ["partID"])
+  partID: ID
+}
+
+type Item @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  productID: ID @index(name: "byProduct")
+  isTagged: Boolean
+  isActive: Boolean
+  isEmployee: Boolean
+  isEquipment: Boolean
+  location: String
+  product: Product @belongsTo(fields: ["productID"])
+  EPC_id: String
+}
+
+type Product @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  isKit: Boolean!
+  items: [Item] @hasMany(indexName: "byProduct", fields: ["id"])
+  kitParts: [KitPart] @hasMany(indexName: "byProduct", fields: ["id"])
+  description: String
+  product_id: String
+  trackThreshold: Boolean!
+  threshold: Int
+  Warehouse: Warehouse @belongsTo(fields: ["warehouseID"])
+  extraDetails: [ExtraDetail]
+  warehouseID: ID! @index(name: "byWarehouse")
+}
+
+type Employee @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  items: Item @hasOne
+  title: String
+  email: String
+  phone: String
+  extraDetails: [ExtraDetail]
+}
+
+type Equipment @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  items: Item @hasOne
+  description: String
+  part_id: String
+  extraDetails: [ExtraDetail]
+}
+ 

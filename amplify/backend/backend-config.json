@@ -1,0 +1,50 @@
+{
+  "api": {
+    "vastvision": {
+      "dependsOn": [],
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "AWS_IAM"
+            }
+          ],
+          "defaultAuthentication": {
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 30,
+              "description": "api key description"
+            },
+            "authenticationType": "API_KEY"
+          }
+        }
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync"
+    }
+  },
+  "function": {
+    "ScannerProcessor": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_ScannerProcessor_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "ScannerProcessor"
+        }
+      ]
+    },
+    "AMPLIFY_function_ScannerProcessor_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "ScannerProcessor"
+        }
+      ]
+    }
+  }
+}

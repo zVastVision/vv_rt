@@ -1,0 +1,1 @@
+import{l as e,o as t,h as s,i as o}from"./entry.bbefaf41.js";const c={},n={class:"text-white"},_=o("h2",null,"Index",-1),a=[_];function r(d,i){return t(),s("div",n,a)}const h=e(c,[["render",r]]);export{h as default};

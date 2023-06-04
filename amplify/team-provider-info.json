@@ -1,0 +1,26 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-vastvision-dev-110542-authRole",
+      "UnauthRoleArn": "arn:aws:iam::143193398563:role/amplify-vastvision-dev-110542-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::143193398563:role/amplify-vastvision-dev-110542-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-vastvision-dev-110542-deployment",
+      "UnauthRoleName": "amplify-vastvision-dev-110542-unauthRole",
+      "StackName": "amplify-vastvision-dev-110542",
+      "StackId": "arn:aws:cloudformation:us-east-1:143193398563:stack/amplify-vastvision-dev-110542/51d5d140-d313-11ed-88ee-0ae1280dd05f",
+      "AmplifyAppId": "d3w4e22c4vjqwn"
+    },
+    "categories": {
+      "function": {
+        "ScannerProcessor": {
+          "deploymentBucketName": "amplify-vastvision-dev-110542-deployment",
+          "s3Key": "amplify-builds/ScannerProcessor-7a74786b623243775a4b-build.zip"
+        }
+      },
+      "api": {
+        "vastvision": {}
+      }
+    }
+  }
+}

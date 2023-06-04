@@ -1,0 +1,778 @@
+
+type ExtraDetail @aws_iam @aws_api_key {
+  name: String
+  value: String
+}
+
+type Warehouse @aws_iam @aws_api_key {
+  id: ID!
+  organizationID: ID!
+  Organization: Organization
+  name: String
+  location: String
+  Products(filter: ModelProductFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelProductConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+}
+
+type Organization @aws_iam @aws_api_key {
+  id: ID!
+  Warehouses(filter: ModelWarehouseFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelWarehouseConnection
+  name: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+}
+
+type KitPart @aws_iam @aws_api_key {
+  id: ID!
+  quantity: Int
+  kitID: ID!
+  Kit: Product
+  part: Product
+  partID: ID
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+}
+
+type Item @aws_iam @aws_api_key {
+  id: ID!
+  productID: ID
+  isTagged: Boolean
+  isActive: Boolean
+  isEmployee: Boolean
+  isEquipment: Boolean
+  location: String
+  product: Product
+  EPC_id: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+}
+
+type Product @aws_iam @aws_api_key {
+  id: ID!
+  name: String!
+  isKit: Boolean!
+  items(filter: ModelItemFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelItemConnection
+  kitParts(filter: ModelKitPartFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelKitPartConnection
+  description: String
+  product_id: String
+  trackThreshold: Boolean!
+  threshold: Int
+  Warehouse: Warehouse
+  extraDetails: [ExtraDetail]
+  warehouseID: ID!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+}
+
+type Employee @aws_iam @aws_api_key {
+  id: ID!
+  name: String!
+  items: Item
+  title: String
+  email: String
+  phone: String
+  extraDetails: [ExtraDetail]
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  employeeItemsId: ID
+}
+
+type Equipment @aws_iam @aws_api_key {
+  id: ID!
+  name: String!
+  items: Item
+  description: String
+  part_id: String
+  extraDetails: [ExtraDetail]
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  equipmentItemsId: ID
+}
+
+input ModelStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelBooleanInput {
+  ne: Boolean
+  eq: Boolean
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelSubscriptionStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  in: [String]
+  notIn: [String]
+}
+
+input ModelSubscriptionIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  in: [Int]
+  notIn: [Int]
+}
+
+input ModelSubscriptionFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  in: [Float]
+  notIn: [Float]
+}
+
+input ModelSubscriptionBooleanInput {
+  ne: Boolean
+  eq: Boolean
+}
+
+input ModelSubscriptionIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  in: [ID]
+  notIn: [ID]
+}
+
+enum ModelAttributeTypes {
+  binary
+  binarySet
+  bool
+  list
+  map
+  number
+  numberSet
+  string
+  stringSet
+  _null
+}
+
+input ModelSizeInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+type ModelWarehouseConnection @aws_api_key @aws_iam {
+  items: [Warehouse]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelWarehouseFilterInput {
+  id: ModelIDInput
+  organizationID: ModelIDInput
+  name: ModelStringInput
+  location: ModelStringInput
+  and: [ModelWarehouseFilterInput]
+  or: [ModelWarehouseFilterInput]
+  not: ModelWarehouseFilterInput
+}
+
+type Query {
+  getWarehouse(id: ID!): Warehouse @aws_api_key @aws_iam
+  listWarehouses(filter: ModelWarehouseFilterInput, limit: Int, nextToken: String): ModelWarehouseConnection @aws_api_key @aws_iam
+  syncWarehouses(filter: ModelWarehouseFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelWarehouseConnection @aws_api_key @aws_iam
+  warehousesByOrganizationID(organizationID: ID!, sortDirection: ModelSortDirection, filter: ModelWarehouseFilterInput, limit: Int, nextToken: String): ModelWarehouseConnection @aws_api_key @aws_iam
+  getOrganization(id: ID!): Organization @aws_api_key @aws_iam
+  listOrganizations(filter: ModelOrganizationFilterInput, limit: Int, nextToken: String): ModelOrganizationConnection @aws_api_key @aws_iam
+  syncOrganizations(filter: ModelOrganizationFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelOrganizationConnection @aws_api_key @aws_iam
+  getKitPart(id: ID!): KitPart @aws_api_key @aws_iam
+  listKitParts(filter: ModelKitPartFilterInput, limit: Int, nextToken: String): ModelKitPartConnection @aws_api_key @aws_iam
+  syncKitParts(filter: ModelKitPartFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelKitPartConnection @aws_api_key @aws_iam
+  kitPartsByKitID(kitID: ID!, sortDirection: ModelSortDirection, filter: ModelKitPartFilterInput, limit: Int, nextToken: String): ModelKitPartConnection @aws_api_key @aws_iam
+  getItem(id: ID!): Item @aws_api_key @aws_iam
+  listItems(filter: ModelItemFilterInput, limit: Int, nextToken: String): ModelItemConnection @aws_api_key @aws_iam
+  syncItems(filter: ModelItemFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelItemConnection @aws_api_key @aws_iam
+  itemsByProductID(productID: ID!, sortDirection: ModelSortDirection, filter: ModelItemFilterInput, limit: Int, nextToken: String): ModelItemConnection @aws_api_key @aws_iam
+  getProduct(id: ID!): Product @aws_api_key @aws_iam
+  listProducts(filter: ModelProductFilterInput, limit: Int, nextToken: String): ModelProductConnection @aws_api_key @aws_iam
+  syncProducts(filter: ModelProductFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelProductConnection @aws_api_key @aws_iam
+  productsByWarehouseID(warehouseID: ID!, sortDirection: ModelSortDirection, filter: ModelProductFilterInput, limit: Int, nextToken: String): ModelProductConnection @aws_api_key @aws_iam
+  getEmployee(id: ID!): Employee @aws_api_key @aws_iam
+  listEmployees(filter: ModelEmployeeFilterInput, limit: Int, nextToken: String): ModelEmployeeConnection @aws_api_key @aws_iam
+  syncEmployees(filter: ModelEmployeeFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelEmployeeConnection @aws_api_key @aws_iam
+  getEquipment(id: ID!): Equipment @aws_api_key @aws_iam
+  listEquipment(filter: ModelEquipmentFilterInput, limit: Int, nextToken: String): ModelEquipmentConnection @aws_api_key @aws_iam
+  syncEquipment(filter: ModelEquipmentFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelEquipmentConnection @aws_api_key @aws_iam
+}
+
+input ModelWarehouseConditionInput {
+  organizationID: ModelIDInput
+  name: ModelStringInput
+  location: ModelStringInput
+  and: [ModelWarehouseConditionInput]
+  or: [ModelWarehouseConditionInput]
+  not: ModelWarehouseConditionInput
+}
+
+input CreateWarehouseInput {
+  id: ID
+  organizationID: ID!
+  name: String
+  location: String
+  _version: Int
+}
+
+input UpdateWarehouseInput {
+  id: ID!
+  organizationID: ID
+  name: String
+  location: String
+  _version: Int
+}
+
+input DeleteWarehouseInput {
+  id: ID!
+  _version: Int
+}
+
+type Mutation {
+  createWarehouse(input: CreateWarehouseInput!, condition: ModelWarehouseConditionInput): Warehouse @aws_api_key @aws_iam
+  updateWarehouse(input: UpdateWarehouseInput!, condition: ModelWarehouseConditionInput): Warehouse @aws_api_key @aws_iam
+  deleteWarehouse(input: DeleteWarehouseInput!, condition: ModelWarehouseConditionInput): Warehouse @aws_api_key @aws_iam
+  createOrganization(input: CreateOrganizationInput!, condition: ModelOrganizationConditionInput): Organization @aws_api_key @aws_iam
+  updateOrganization(input: UpdateOrganizationInput!, condition: ModelOrganizationConditionInput): Organization @aws_api_key @aws_iam
+  deleteOrganization(input: DeleteOrganizationInput!, condition: ModelOrganizationConditionInput): Organization @aws_api_key @aws_iam
+  createKitPart(input: CreateKitPartInput!, condition: ModelKitPartConditionInput): KitPart @aws_api_key @aws_iam
+  updateKitPart(input: UpdateKitPartInput!, condition: ModelKitPartConditionInput): KitPart @aws_api_key @aws_iam
+  deleteKitPart(input: DeleteKitPartInput!, condition: ModelKitPartConditionInput): KitPart @aws_api_key @aws_iam
+  createItem(input: CreateItemInput!, condition: ModelItemConditionInput): Item @aws_api_key @aws_iam
+  updateItem(input: UpdateItemInput!, condition: ModelItemConditionInput): Item @aws_api_key @aws_iam
+  deleteItem(input: DeleteItemInput!, condition: ModelItemConditionInput): Item @aws_api_key @aws_iam
+  createProduct(input: CreateProductInput!, condition: ModelProductConditionInput): Product @aws_api_key @aws_iam
+  updateProduct(input: UpdateProductInput!, condition: ModelProductConditionInput): Product @aws_api_key @aws_iam
+  deleteProduct(input: DeleteProductInput!, condition: ModelProductConditionInput): Product @aws_api_key @aws_iam
+  createEmployee(input: CreateEmployeeInput!, condition: ModelEmployeeConditionInput): Employee @aws_api_key @aws_iam
+  updateEmployee(input: UpdateEmployeeInput!, condition: ModelEmployeeConditionInput): Employee @aws_api_key @aws_iam
+  deleteEmployee(input: DeleteEmployeeInput!, condition: ModelEmployeeConditionInput): Employee @aws_api_key @aws_iam
+  createEquipment(input: CreateEquipmentInput!, condition: ModelEquipmentConditionInput): Equipment @aws_api_key @aws_iam
+  updateEquipment(input: UpdateEquipmentInput!, condition: ModelEquipmentConditionInput): Equipment @aws_api_key @aws_iam
+  deleteEquipment(input: DeleteEquipmentInput!, condition: ModelEquipmentConditionInput): Equipment @aws_api_key @aws_iam
+}
+
+input ModelSubscriptionWarehouseFilterInput {
+  id: ModelSubscriptionIDInput
+  organizationID: ModelSubscriptionIDInput
+  name: ModelSubscriptionStringInput
+  location: ModelSubscriptionStringInput
+  and: [ModelSubscriptionWarehouseFilterInput]
+  or: [ModelSubscriptionWarehouseFilterInput]
+}
+
+type Subscription {
+  onCreateWarehouse(filter: ModelSubscriptionWarehouseFilterInput): Warehouse @aws_subscribe(mutations: ["createWarehouse"]) @aws_api_key @aws_iam
+  onUpdateWarehouse(filter: ModelSubscriptionWarehouseFilterInput): Warehouse @aws_subscribe(mutations: ["updateWarehouse"]) @aws_api_key @aws_iam
+  onDeleteWarehouse(filter: ModelSubscriptionWarehouseFilterInput): Warehouse @aws_subscribe(mutations: ["deleteWarehouse"]) @aws_api_key @aws_iam
+  onCreateOrganization(filter: ModelSubscriptionOrganizationFilterInput): Organization @aws_subscribe(mutations: ["createOrganization"]) @aws_api_key @aws_iam
+  onUpdateOrganization(filter: ModelSubscriptionOrganizationFilterInput): Organization @aws_subscribe(mutations: ["updateOrganization"]) @aws_api_key @aws_iam
+  onDeleteOrganization(filter: ModelSubscriptionOrganizationFilterInput): Organization @aws_subscribe(mutations: ["deleteOrganization"]) @aws_api_key @aws_iam
+  onCreateKitPart(filter: ModelSubscriptionKitPartFilterInput): KitPart @aws_subscribe(mutations: ["createKitPart"]) @aws_api_key @aws_iam
+  onUpdateKitPart(filter: ModelSubscriptionKitPartFilterInput): KitPart @aws_subscribe(mutations: ["updateKitPart"]) @aws_api_key @aws_iam
+  onDeleteKitPart(filter: ModelSubscriptionKitPartFilterInput): KitPart @aws_subscribe(mutations: ["deleteKitPart"]) @aws_api_key @aws_iam
+  onCreateItem(filter: ModelSubscriptionItemFilterInput): Item @aws_subscribe(mutations: ["createItem"]) @aws_api_key @aws_iam
+  onUpdateItem(filter: ModelSubscriptionItemFilterInput): Item @aws_subscribe(mutations: ["updateItem"]) @aws_api_key @aws_iam
+  onDeleteItem(filter: ModelSubscriptionItemFilterInput): Item @aws_subscribe(mutations: ["deleteItem"]) @aws_api_key @aws_iam
+  onCreateProduct(filter: ModelSubscriptionProductFilterInput): Product @aws_subscribe(mutations: ["createProduct"]) @aws_api_key @aws_iam
+  onUpdateProduct(filter: ModelSubscriptionProductFilterInput): Product @aws_subscribe(mutations: ["updateProduct"]) @aws_api_key @aws_iam
+  onDeleteProduct(filter: ModelSubscriptionProductFilterInput): Product @aws_subscribe(mutations: ["deleteProduct"]) @aws_api_key @aws_iam
+  onCreateEmployee(filter: ModelSubscriptionEmployeeFilterInput): Employee @aws_subscribe(mutations: ["createEmployee"]) @aws_api_key @aws_iam
+  onUpdateEmployee(filter: ModelSubscriptionEmployeeFilterInput): Employee @aws_subscribe(mutations: ["updateEmployee"]) @aws_api_key @aws_iam
+  onDeleteEmployee(filter: ModelSubscriptionEmployeeFilterInput): Employee @aws_subscribe(mutations: ["deleteEmployee"]) @aws_api_key @aws_iam
+  onCreateEquipment(filter: ModelSubscriptionEquipmentFilterInput): Equipment @aws_subscribe(mutations: ["createEquipment"]) @aws_api_key @aws_iam
+  onUpdateEquipment(filter: ModelSubscriptionEquipmentFilterInput): Equipment @aws_subscribe(mutations: ["updateEquipment"]) @aws_api_key @aws_iam
+  onDeleteEquipment(filter: ModelSubscriptionEquipmentFilterInput): Equipment @aws_subscribe(mutations: ["deleteEquipment"]) @aws_api_key @aws_iam
+}
+
+type ModelOrganizationConnection @aws_api_key @aws_iam {
+  items: [Organization]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelOrganizationFilterInput {
+  id: ModelIDInput
+  name: ModelStringInput
+  and: [ModelOrganizationFilterInput]
+  or: [ModelOrganizationFilterInput]
+  not: ModelOrganizationFilterInput
+}
+
+input ModelOrganizationConditionInput {
+  name: ModelStringInput
+  and: [ModelOrganizationConditionInput]
+  or: [ModelOrganizationConditionInput]
+  not: ModelOrganizationConditionInput
+}
+
+input CreateOrganizationInput {
+  id: ID
+  name: String
+  _version: Int
+}
+
+input UpdateOrganizationInput {
+  id: ID!
+  name: String
+  _version: Int
+}
+
+input DeleteOrganizationInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionOrganizationFilterInput {
+  id: ModelSubscriptionIDInput
+  name: ModelSubscriptionStringInput
+  and: [ModelSubscriptionOrganizationFilterInput]
+  or: [ModelSubscriptionOrganizationFilterInput]
+}
+
+type ModelKitPartConnection @aws_api_key @aws_iam {
+  items: [KitPart]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelKitPartFilterInput {
+  id: ModelIDInput
+  quantity: ModelIntInput
+  kitID: ModelIDInput
+  partID: ModelIDInput
+  and: [ModelKitPartFilterInput]
+  or: [ModelKitPartFilterInput]
+  not: ModelKitPartFilterInput
+}
+
+input ModelKitPartConditionInput {
+  quantity: ModelIntInput
+  kitID: ModelIDInput
+  partID: ModelIDInput
+  and: [ModelKitPartConditionInput]
+  or: [ModelKitPartConditionInput]
+  not: ModelKitPartConditionInput
+}
+
+input CreateKitPartInput {
+  id: ID
+  quantity: Int
+  kitID: ID!
+  partID: ID
+  _version: Int
+}
+
+input UpdateKitPartInput {
+  id: ID!
+  quantity: Int
+  kitID: ID
+  partID: ID
+  _version: Int
+}
+
+input DeleteKitPartInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionKitPartFilterInput {
+  id: ModelSubscriptionIDInput
+  quantity: ModelSubscriptionIntInput
+  kitID: ModelSubscriptionIDInput
+  partID: ModelSubscriptionIDInput
+  and: [ModelSubscriptionKitPartFilterInput]
+  or: [ModelSubscriptionKitPartFilterInput]
+}
+
+type ModelItemConnection @aws_api_key @aws_iam {
+  items: [Item]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelItemFilterInput {
+  id: ModelIDInput
+  productID: ModelIDInput
+  isTagged: ModelBooleanInput
+  isActive: ModelBooleanInput
+  isEmployee: ModelBooleanInput
+  isEquipment: ModelBooleanInput
+  location: ModelStringInput
+  EPC_id: ModelStringInput
+  and: [ModelItemFilterInput]
+  or: [ModelItemFilterInput]
+  not: ModelItemFilterInput
+}
+
+input ModelItemConditionInput {
+  productID: ModelIDInput
+  isTagged: ModelBooleanInput
+  isActive: ModelBooleanInput
+  isEmployee: ModelBooleanInput
+  isEquipment: ModelBooleanInput
+  location: ModelStringInput
+  EPC_id: ModelStringInput
+  and: [ModelItemConditionInput]
+  or: [ModelItemConditionInput]
+  not: ModelItemConditionInput
+}
+
+input CreateItemInput {
+  id: ID
+  productID: ID
+  isTagged: Boolean
+  isActive: Boolean
+  isEmployee: Boolean
+  isEquipment: Boolean
+  location: String
+  EPC_id: String
+  _version: Int
+}
+
+input UpdateItemInput {
+  id: ID!
+  productID: ID
+  isTagged: Boolean
+  isActive: Boolean
+  isEmployee: Boolean
+  isEquipment: Boolean
+  location: String
+  EPC_id: String
+  _version: Int
+}
+
+input DeleteItemInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionItemFilterInput {
+  id: ModelSubscriptionIDInput
+  productID: ModelSubscriptionIDInput
+  isTagged: ModelSubscriptionBooleanInput
+  isActive: ModelSubscriptionBooleanInput
+  isEmployee: ModelSubscriptionBooleanInput
+  isEquipment: ModelSubscriptionBooleanInput
+  location: ModelSubscriptionStringInput
+  EPC_id: ModelSubscriptionStringInput
+  and: [ModelSubscriptionItemFilterInput]
+  or: [ModelSubscriptionItemFilterInput]
+}
+
+input ExtraDetailInput {
+  name: String
+  value: String
+}
+
+type ModelProductConnection @aws_iam @aws_api_key {
+  items: [Product]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelProductFilterInput {
+  id: ModelIDInput
+  name: ModelStringInput
+  isKit: ModelBooleanInput
+  description: ModelStringInput
+  product_id: ModelStringInput
+  trackThreshold: ModelBooleanInput
+  threshold: ModelIntInput
+  warehouseID: ModelIDInput
+  and: [ModelProductFilterInput]
+  or: [ModelProductFilterInput]
+  not: ModelProductFilterInput
+}
+
+input ModelProductConditionInput {
+  name: ModelStringInput
+  isKit: ModelBooleanInput
+  description: ModelStringInput
+  product_id: ModelStringInput
+  trackThreshold: ModelBooleanInput
+  threshold: ModelIntInput
+  warehouseID: ModelIDInput
+  and: [ModelProductConditionInput]
+  or: [ModelProductConditionInput]
+  not: ModelProductConditionInput
+}
+
+input CreateProductInput {
+  id: ID
+  name: String!
+  isKit: Boolean!
+  description: String
+  product_id: String
+  trackThreshold: Boolean!
+  threshold: Int
+  extraDetails: [ExtraDetailInput]
+  warehouseID: ID!
+  _version: Int
+}
+
+input UpdateProductInput {
+  id: ID!
+  name: String
+  isKit: Boolean
+  description: String
+  product_id: String
+  trackThreshold: Boolean
+  threshold: Int
+  extraDetails: [ExtraDetailInput]
+  warehouseID: ID
+  _version: Int
+}
+
+input DeleteProductInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionProductFilterInput {
+  id: ModelSubscriptionIDInput
+  name: ModelSubscriptionStringInput
+  isKit: ModelSubscriptionBooleanInput
+  description: ModelSubscriptionStringInput
+  product_id: ModelSubscriptionStringInput
+  trackThreshold: ModelSubscriptionBooleanInput
+  threshold: ModelSubscriptionIntInput
+  warehouseID: ModelSubscriptionIDInput
+  and: [ModelSubscriptionProductFilterInput]
+  or: [ModelSubscriptionProductFilterInput]
+}
+
+type ModelEmployeeConnection @aws_api_key @aws_iam {
+  items: [Employee]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelEmployeeFilterInput {
+  id: ModelIDInput
+  name: ModelStringInput
+  title: ModelStringInput
+  email: ModelStringInput
+  phone: ModelStringInput
+  and: [ModelEmployeeFilterInput]
+  or: [ModelEmployeeFilterInput]
+  not: ModelEmployeeFilterInput
+  employeeItemsId: ModelIDInput
+}
+
+input ModelEmployeeConditionInput {
+  name: ModelStringInput
+  title: ModelStringInput
+  email: ModelStringInput
+  phone: ModelStringInput
+  and: [ModelEmployeeConditionInput]
+  or: [ModelEmployeeConditionInput]
+  not: ModelEmployeeConditionInput
+  employeeItemsId: ModelIDInput
+}
+
+input CreateEmployeeInput {
+  id: ID
+  name: String!
+  title: String
+  email: String
+  phone: String
+  extraDetails: [ExtraDetailInput]
+  _version: Int
+  employeeItemsId: ID
+}
+
+input UpdateEmployeeInput {
+  id: ID!
+  name: String
+  title: String
+  email: String
+  phone: String
+  extraDetails: [ExtraDetailInput]
+  _version: Int
+  employeeItemsId: ID
+}
+
+input DeleteEmployeeInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionEmployeeFilterInput {
+  id: ModelSubscriptionIDInput
+  name: ModelSubscriptionStringInput
+  title: ModelSubscriptionStringInput
+  email: ModelSubscriptionStringInput
+  phone: ModelSubscriptionStringInput
+  and: [ModelSubscriptionEmployeeFilterInput]
+  or: [ModelSubscriptionEmployeeFilterInput]
+}
+
+type ModelEquipmentConnection @aws_api_key @aws_iam {
+  items: [Equipment]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelEquipmentFilterInput {
+  id: ModelIDInput
+  name: ModelStringInput
+  description: ModelStringInput
+  part_id: ModelStringInput
+  and: [ModelEquipmentFilterInput]
+  or: [ModelEquipmentFilterInput]
+  not: ModelEquipmentFilterInput
+  equipmentItemsId: ModelIDInput
+}
+
+input ModelEquipmentConditionInput {
+  name: ModelStringInput
+  description: ModelStringInput
+  part_id: ModelStringInput
+  and: [ModelEquipmentConditionInput]
+  or: [ModelEquipmentConditionInput]
+  not: ModelEquipmentConditionInput
+  equipmentItemsId: ModelIDInput
+}
+
+input CreateEquipmentInput {
+  id: ID
+  name: String!
+  description: String
+  part_id: String
+  extraDetails: [ExtraDetailInput]
+  _version: Int
+  equipmentItemsId: ID
+}
+
+input UpdateEquipmentInput {
+  id: ID!
+  name: String
+  description: String
+  part_id: String
+  extraDetails: [ExtraDetailInput]
+  _version: Int
+  equipmentItemsId: ID
+}
+
+input DeleteEquipmentInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionEquipmentFilterInput {
+  id: ModelSubscriptionIDInput
+  name: ModelSubscriptionStringInput
+  description: ModelSubscriptionStringInput
+  part_id: ModelSubscriptionStringInput
+  and: [ModelSubscriptionEquipmentFilterInput]
+  or: [ModelSubscriptionEquipmentFilterInput]
+}
+
